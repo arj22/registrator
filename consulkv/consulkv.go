@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gliderlabs/registrator/bridge"
+	"github.com/arj22/registrator/bridge"
 	consulapi "github.com/hashicorp/consul/api"
 )
 
