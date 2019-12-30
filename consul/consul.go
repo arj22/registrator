@@ -86,6 +86,20 @@ func (r *ConsulAdapter) Register(service *bridge.Service) error {
 	registration.Address = service.IP
 	registration.Check = r.buildCheck(service)
 	registration.Meta = service.Attrs
+        if service.Attrs["sidecar"] == "true" {
+                registration.Connect = &consulapi.AgentServiceConnect{
+                        SidecarService: &consulapi.AgentServiceRegistration{ Proxy : &consulapi.AgentServiceConnectProxyConfig{
+                 Upstreams : []consulapi.Upstream{
+                         {
+                         DestinationName : "http-out",
+                         LocalBindAddress : "0.0.0.0",
+                         LocalBindPort : 9999,
+                         },
+                 },
+         },
+ },
+                }
+        }
 	return r.client.Agent().ServiceRegister(registration)
 }
 
